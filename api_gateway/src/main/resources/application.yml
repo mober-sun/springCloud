@@ -1,0 +1,23 @@
+server:
+  port: 9000
+
+# name
+spring:
+  application:
+    name: api-gateway
+
+# 指定注册中心
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+# 网关
+# 敏感头里面会过滤掉cookie
+zuul:
+  routes:
+    product-service: /apigateway/product/**
+    order-service: /apigateway/order/**
+  ignored-patterns: /*-service/**
+  #处理http请求头为空的问题  自定义 敏感header 信息；让zuul去过滤，此处定义空，不让默认的cookile;set-cookie;authorization
+  sensitive-headers:

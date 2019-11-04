@@ -1,0 +1,64 @@
+server:
+  port: 8781
+
+#1.1指定注册中心地址
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+#1.2服务的名称
+spring:
+  application:
+    name: order-service
+    redis:
+      database: 0
+      host: 192.168.109.110
+      port: 6399
+      timeout: 2000
+
+
+#2、ribbon 自定义负载均衡策略
+product-service: #这是被调服务（如果有集群的话，可以采用随机的找服务）  // 注意 feign里面包含了ribbon
+  ribbon:
+    #NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule # IRule 的实现类（ribbon负载均衡的规则）
+    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RetryRule
+#3、feign  修改调用超时时间
+feign:
+  # 4、feign 开启对hystrix的支持；
+  hystrix:
+    enabled: true
+
+  client:
+    config:
+      default:
+        connectTimeout: 2000
+        readTimeout: 2000      # 超时时间；
+
+#把hystrix超时时间禁用
+#hystrix:
+#  command:
+#    default:
+#      execution:
+#        timeout:
+#          enabled: false
+
+#execution.isolation.thread.timeoutInMilliseconds=4000
+
+#4、设置超时时间（hysyrix 自己）
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 4000
+
+# 5、使用dashboard监控器时 让springCloud 暴露对外的接口
+#
+#
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
