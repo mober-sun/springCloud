@@ -1,5 +1,6 @@
 package com.sunhui.product_service.controller;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import com.sunhui.product_service.domain.Product;
 import com.sunhui.product_service.services.ProductServices;
 import org.springframework.beans.BeanUtils;
@@ -45,6 +46,10 @@ public class ProductController {
         BeanUtils.copyProperties(product, result);
         result.setName(result.getName() + " data from port=" + port + " ");
         return result;
+    }
+
+    public void test(){
+        System.out.println("第一次");
     }
 
 }
